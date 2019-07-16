@@ -5,6 +5,11 @@ VisualStudioVersion = 15.0.28010.2041
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PracticeProblems", "PracticeProblems\PracticeProblems.vcxproj", "{ADC47721-D2D4-4B7B-B5A3-2B4E1F40E984}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8CA292B2-E7B9-479D-B03A-2F6E9B20A801}"
+	ProjectSection(SolutionItems) = preProject
+		PracticeProblems\LinkedList.h = PracticeProblems\LinkedList.h
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64

@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="LinkedList.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>

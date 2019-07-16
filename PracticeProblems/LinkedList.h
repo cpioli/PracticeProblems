@@ -1,13 +1,17 @@
 #pragma once
 
 #include <ostream>
+#include <string>
 
 template <typename T>
 struct Node {
 	Node *next;
 	T m_Content;
-	Node() : next(nullptr) {}
-	Node(T _content) : next(nullptr), m_content(_content) {}
+	Node() : next(nullptr) {};
+	Node(const T &_content) {
+		next = nullptr;
+		m_Content = _content;
+	}
 };
 
 template<typename T>
@@ -25,18 +29,26 @@ public:
 	void pop_front();
 	void push_back(const T &_value);
 	size_t length();
-	friend ostream & operator<<(ostream &out, LinkedList<T> &list);
+	friend std::ostream & operator<<(std::ostream &out, const LinkedList<T>& list)
+	{
+		Node<T> *cursor = list.m_head;
+		while (cursor != nullptr) {
+			out << cursor->m_Content << " ";
+			cursor = cursor->next;
+		}
+		return out;
+	}
 };
 
 template<typename T>
-LinkedList<T>::LinkedList<T>() {
+LinkedList<T>::LinkedList() {
 	m_head = nullptr;
 	m_tail = m_head;
 	m_length = 0;
 }
 
 template<typename T>
-LinkedList<T>::LinkedList<T>(const T &_value) {
+LinkedList<T>::LinkedList(const T &_value) {
 	m_head = new Node<T>(_value);
 	m_tail = m_head;
 	m_length = 1;
@@ -93,13 +105,4 @@ void LinkedList<T>::push_back(const T &_value) {
 template<typename T>
 size_t LinkedList<T>::length() {
 	return m_length;
-}
-
-template<typename T>
-std::ostream & operator<<(std::ostream &out, LinkedList<T> &list) {
-	m_cursor = m_head;
-	while (m_cursor != nullptr) {
-		out << m_cursor->m_Content << " ";
-	}
-	return os;
 }
