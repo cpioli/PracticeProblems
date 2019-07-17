@@ -3,37 +3,44 @@
 #include <ostream>
 #include <string>
 
+template<typename T> class LinkedList;
+template<typename T> class LinkedList_iter;
+
 template <typename T>
-struct Node {
-	Node *next;
-	T m_Content;
-	Node() : next(nullptr) {};
-	Node(const T &_content) {
-		next = nullptr;
-		m_Content = _content;
-	}
+class LinkedListNode {
+
+	friend class LinkedList<T>;
+	friend class LinkedList_iter<T>;
+	private:
+		LinkedListNode() : next(nullptr) {};
+		LinkedListNode(const T &_content) : m_value(_content), next(nullptr) {};
+		LinkedListNode(const T &_content, LinkedListNode<T> *next) : m_value(_content), next(next) {};
+		~LinkedListNode() { delete next; }
+	public:
+		LinkedListNode<T> *next;
+		T m_value;
 };
 
 template<typename T>
 class LinkedList {
 private:
-	Node<T> *m_head;
-	Node<T> *m_tail;
-	Node<T> *m_cursor; //a reusable cursor
+	LinkedListNode<T> *m_head, *m_tail, *m_cursor; //a reusable cursor
 	size_t m_length;
 public:
-	LinkedList<T>();
+	LinkedList<T>() : m_head(nullptr), m_tail(nullptr), m_length(0) {};
+	~LinkedList<T>() { delete m_head; }
 	LinkedList<T>(const T &_value);
 	void clear();
 	void push_front(const T &_value);
 	void pop_front();
 	void push_back(const T &_value);
+	bool empty() { return head == nullptr; }
 	size_t length();
 	friend std::ostream & operator<<(std::ostream &out, const LinkedList<T>& list)
 	{
-		Node<T> *cursor = list.m_head;
+		LinkedListNode<T> *cursor = list.m_head;
 		while (cursor != nullptr) {
-			out << cursor->m_Content << " ";
+			out << cursor->m_value << " ";
 			cursor = cursor->next;
 		}
 		return out;
@@ -41,15 +48,8 @@ public:
 };
 
 template<typename T>
-LinkedList<T>::LinkedList() {
-	m_head = nullptr;
-	m_tail = m_head;
-	m_length = 0;
-}
-
-template<typename T>
 LinkedList<T>::LinkedList(const T &_value) {
-	m_head = new Node<T>(_value);
+	m_head = new LinkedListNode<T>(_value);
 	m_tail = m_head;
 	m_length = 1;
 }
@@ -66,22 +66,18 @@ void LinkedList<T>::clear() {
 
 template<typename T>
 void LinkedList<T>::push_front(const T &_value) {
-	if (m_length == 0) {
-		m_head = new Node<T>(_value);
-		m_tail = m_head;
-		m_length++;
-		return;
-	}
-	m_cursor = m_head;
-	m_head = new Node<T>(_value);
-	m_head->next = m_cursor;
+	LinkedListNode<T> *newNode = new LinkedListNode<T>(_value, m_head);
+	m_head = newNode;
 	m_length++;
+	if (m_tail == nullptr) {
+		m_tail = newNode;
+	}
 	return;
 }
 
 template<typename T>
 void LinkedList<T>::pop_front() {
-	if (m_length == 0) return;
+	if (m_length == nullptr) return;
 	m_cursor = m_head;
 	m_head = m_head->next;
 	delete m_cursor;
@@ -91,14 +87,13 @@ void LinkedList<T>::pop_front() {
 
 template<typename T>
 void LinkedList<T>::push_back(const T &_value) {
-	if (m_length == 0) {
-		m_head = new Node<T>(_value);
-		m_tail = m_head;
-		m_length++;
-		return;
+	LinkedListNode<T> *newNode = new LinkedListNode<T>(_value, nullptr);
+	if (m_head == nullptr) {
+		m_head = newNode;
+	} else {
+		m_tail->next = newNode;
 	}
-	m_tail->next = new Node<T>(_value);
-	m_tail = m_tail->next;
+	m_tail = newNode;
 	m_length++;
 }
 
