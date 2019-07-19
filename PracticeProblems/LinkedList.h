@@ -2,21 +2,24 @@
 
 #include <ostream>
 #include <string>
+#include "LinkedListIter.h"
 
 template<typename T> class LinkedList;
-template<typename T> class LinkedList_iter;
+template<typename T> class LinkedListIter;
 
 template <typename T>
 class LinkedListNode {
 
 	friend class LinkedList<T>;
-	friend class LinkedList_iter<T>;
+	friend class LinkedListIter<T>;
 	private:
 		LinkedListNode() : next(nullptr) {};
 		LinkedListNode(const T &_content) : m_value(_content), next(nullptr) {};
 		LinkedListNode(const T &_content, LinkedListNode<T> *next) : m_value(_content), next(next) {};
 		~LinkedListNode() { delete next; }
 	public:
+
+
 		LinkedListNode<T> *next;
 		T m_value;
 };
@@ -27,11 +30,23 @@ private:
 	LinkedListNode<T> *m_head, *m_tail, *m_cursor; //a reusable cursor
 	size_t m_length;
 public:
+	typedef LinkedListIterator<T>	iterator;
+	typedef LinkedListIterator<const T> const_iterator;
+
 	LinkedList<T>() : m_head(nullptr), m_tail(nullptr), m_length(0) {};
 	~LinkedList<T>() { delete m_head; }
 	LinkedList<T>(const T &_value);
 	LinkedList<T>(const LinkedList<T>& rhs);
-	size_t length();
+
+	bool empty() const { return m_head == nullptr; }
+	size_t length() const {	return m_length; }
+
+	//Iterators
+	iterator begin() { return iterator(m_head); }
+	iterator end() { return iterator(m_tail); }
+	const_iterator cbegin() { return const_iterator(m_head); }
+	const_iterator cend() { return const_iterator(m_tail); }
+
 	void clear();
 	void push_front(const T &_value);
 	void pop_front();
@@ -40,8 +55,9 @@ public:
 	bool insert_before(const T &_nextValue, const T &_insertValue);
 	bool erase(const T &_deleteValue);
 	bool erase_after(const T &_beforeValue);
-	bool empty() { return m_head == nullptr; }
 	void reverse();
+	//void resize(size_t count);
+	//void resize(size_t count, const T &value);
 	friend std::ostream & operator<<(std::ostream &out, const LinkedList<T>& list)
 	{
 		LinkedListNode<T> *cursor = list.m_head;
@@ -49,6 +65,7 @@ public:
 			out << cursor->m_value << " ";
 			cursor = cursor->next;
 		}
+		
 		return out;
 	}
 	LinkedList<T>& operator+(const LinkedList<T>& rhs);
@@ -224,11 +241,6 @@ void LinkedList<T>::reverse() {
 }
 
 template<typename T>
-size_t LinkedList<T>::length() {
-	return m_length;
-}
-
-template<typename T>
 LinkedList<T>& LinkedList<T>::operator+(const LinkedList<T>& rhs) {
 	LinkedListNode<T> *temp = rhs.m_head;
 	m_cursor = m_tail;
@@ -271,7 +283,6 @@ LinkedList<T>& LinkedList<T>::operator=(const LinkedList<T>& rhs) {
 		if (pre_cursor != this->m_cursor) pre_cursor = pre_cursor->next;
 		this->m_cursor = this->m_cursor->next;
 	}
-	if (this->m_cursor == nullptr) std::cout << "m_cursor is a null pointer" << std::endl;
 	while (temp != nullptr) { //if there are still elements in rhs that need adding
 		LinkedListNode<T> *newNode = new LinkedListNode<T>(temp->m_value);
 		pre_cursor->next = newNode;
