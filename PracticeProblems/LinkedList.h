@@ -2,7 +2,6 @@
 
 #include <ostream>
 #include <string>
-#include "LinkedListIter.h"
 
 template<typename T> class LinkedList;
 template<typename T> class LinkedListIter;
@@ -22,6 +21,39 @@ class LinkedListNode {
 
 		LinkedListNode<T> *next;
 		T m_value;
+};
+
+template<typename T> //for our purposes, T is the LinkedListNode
+class LinkedListIterator : public std::iterator<std::forward_iterator_tag,
+	LinkedListNode<T>>
+{
+public:
+	LinkedListIterator<T>(LinkedListNode<T> *ptr = nullptr) { m_ptr = ptr; }
+	LinkedListIterator<T>(const LinkedListIterator<T> &ptr) { this->m_ptr = ptr.getPtr(); }
+	~LinkedListIterator<T>() {}
+
+	LinkedListIterator<T>& operator=(const LinkedListIterator<T>& iter) = default;
+	LinkedListIterator<T>& operator=(LinkedListNode<T>* ptr) { m_ptr = ptr; return(*this); }
+
+	operator bool()const
+	{
+		if (m_ptr) return true;
+		else	   return false;
+	}
+
+	bool operator==(const LinkedListIterator<T>& iter) const { return (m_ptr == iter.getConstPtr()); }
+	bool operator!=(const LinkedListIterator<T>& iter) const { return (m_ptr != iter.getConstPtr()); }
+
+	LinkedListIterator<T>&  operator++() { m_ptr = m_ptr->next; return (*this); }
+
+	T&						operator*() { return m_ptr->m_value; }
+	const T&				operator*()const { return *m_ptr->m_value; }
+	T*						operator->() { return m_ptr->m_value; }
+
+	LinkedListNode<T>*						getPtr()const { return m_ptr; }
+	const LinkedListNode<T>*				getConstPtr()const { return m_ptr; }
+protected:
+	LinkedListNode<T>* m_ptr;
 };
 
 template<typename T>
