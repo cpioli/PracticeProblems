@@ -2,6 +2,7 @@
 
 #include <ostream>
 #include <string>
+#include <vector>
 
 template<typename T> class LinkedList;
 template<typename T> class LinkedListIter;
@@ -30,14 +31,7 @@ class LinkedListIterator : public std::iterator<std::forward_iterator_tag,
 public:
 	LinkedListIterator<T>(LinkedListNode<T> *ptr = nullptr) { m_ptr = ptr; }
 	LinkedListIterator<T>(const LinkedListIterator<T> &ptr) { this->m_ptr = ptr.getPtr(); }
-	~LinkedListIterator<T>() {
-		m_cursor = m_head;
-		while (m_cursor != nullptr) {
-			LinkedListNode<T> *next = m_cursor->next;
-			delete m_cursor;
-			m_cursor = next;
-		}
-	}
+	~LinkedListIterator<T>() { }
 
 	LinkedListIterator<T>& operator=(const LinkedListIterator<T>& iter) = default;
 	LinkedListIterator<T>& operator=(LinkedListNode<T>* ptr) { m_ptr = ptr; return(*this); }
@@ -73,8 +67,8 @@ public:
 	typedef LinkedListIterator<const T> const_iterator;
 
 	LinkedList<T>() : m_head(nullptr), m_tail(nullptr), m_length(0) {};
-	//LinkedList<T>(std::vector<T> v);
-	~LinkedList<T>() { delete m_head; }
+	LinkedList<T>(const std::vector<T>& _vector);
+	~LinkedList<T>();
 	LinkedList<T>(const T &_value);
 	LinkedList<T>(const LinkedList<T>& rhs);
 
@@ -87,6 +81,7 @@ public:
 	const_iterator cbegin() { return const_iterator(m_head); }
 	const_iterator cend() { return const_iterator(m_tail); }
 
+	T front() { return m_head->m_value; }
 	void clear();
 	void push_front(const T &_value);
 	void pop_front();
@@ -118,6 +113,23 @@ LinkedList<T>::LinkedList(const T &_value) {
 	m_head = new LinkedListNode<T>(_value);
 	m_tail = m_head;
 	m_length = 1;
+}
+
+template<typename T>
+LinkedList<T>::LinkedList(const std::vector<T>& _vector) {
+	for (T v : _vector) {
+		push_back(v);
+	}
+}
+
+template<typename T>
+LinkedList<T>::~LinkedList() {
+	m_cursor = m_head;
+	while (m_cursor != nullptr) {
+		LinkedListNode<T> *next = m_cursor->next;
+		delete m_cursor;
+		m_cursor = next;
+	}
 }
 
 template<typename T>
@@ -231,7 +243,7 @@ bool LinkedList<T>::erase(const T &_deleteValue) {
 	while (m_cursor->next != nullptr) {
 		if (m_cursor->m_value == _deleteValue) {
 			pre_cursor->next = m_cursor->next;
-			m_cursor->next = nullptr; //without this the destructor will propogate through the rest of the linked list
+			m_cursor->next = nullptr;
 			delete m_cursor;
 			m_length--;
 			return true;
@@ -307,13 +319,9 @@ void LinkedList<T>::resize(size_t count) {
 			pre_cursor->next = newNode;
 			m_cursor = newNode;
 		}
-		//pre_cursor = m_cursor;
-		//m_cursor = m_cursor->next;
 		count--;
 	}
-	std::cout << "value in pre_cursor: " << pre_cursor->m_value << std::endl;
 	if (m_cursor != nullptr) {
-		std::cout << "Deleting " << m_cursor->m_value << std::endl;
 		delete m_cursor;
 		m_tail = pre_cursor;
 		pre_cursor->next = nullptr;
