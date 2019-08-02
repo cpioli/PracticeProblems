@@ -75,11 +75,9 @@ template<typename T>
 BinaryTreeNode<T>* BinarySearchTree<T>::erase(BinaryTreeNode<T> *root, const T& _value) {
 	if (root == nullptr) return root;
 	if (_value < root->m_value) {
-		//std::cout << "Going left to " << root->left->m_value << std::endl;
 		root->left = erase(root->left, _value);
 	}
 	else if (_value > root->m_value) {
-		//std::cout << "Going right to " << root->right->m_value << std::endl;
 		root->right = erase(root->right, _value);
 	}
 	else {
@@ -149,7 +147,6 @@ void BinarySearchTree<T>::preorderPrintTraversal(BinaryTreeNode<T> *root) const 
 // public functions
 //
 
-
 template<typename T>
 void BinarySearchTree<T>::insert(const T& _value) {
 	if (m_root == nullptr) m_root = new BinaryTreeNode<T>(_value);
@@ -157,16 +154,9 @@ void BinarySearchTree<T>::insert(const T& _value) {
 		insert(_value, m_root);
 }
 
-/*
-algorithm: if left-or-right side of target node is null, have target pointer 
-		   point to the next node
-		   if both are full, delete the target and replace it with a leaf from
-		   the left side to rebalance the tree
-*/
 template<typename T>
 void BinarySearchTree<T>::erase(const T& _value) {
 	erase(m_root, _value);
-	
 }
 
 template<typename T>
