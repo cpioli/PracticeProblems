@@ -21,6 +21,12 @@
     <ClInclude Include="LinkedList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BinaryTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nQueens.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -28,6 +34,9 @@
     </ClCompile>
     <ClCompile Include="PracticeProblems.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nQueens.cpp">
+      <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
