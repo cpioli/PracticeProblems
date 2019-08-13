@@ -16,9 +16,9 @@ private:
 	void helper(vector<vector<string>> &answers,
 		vector<string> &board,
 		vector<int> &queens,
-		long long int &colMask,
-		long long int &deg45Mask,
-		long long int &deg135Mask,
+		uint64_t &colMask,
+		uint64_t &deg45Mask,
+		uint64_t &deg135Mask,
 		int &n,
 		int row);
 };
