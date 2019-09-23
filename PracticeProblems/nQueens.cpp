@@ -3,13 +3,13 @@
 #include <string>
 #include "nQueens.h"
 
-vector<vector<string>> NQueens::solveNQueens(int n) {
+vector<vector<string>> NQueens::solveNQueens(uint64_t n) {
 	if (n == 1) {
 		vector<vector<string>> answer{ { "Q" } };
 		return answer;
 	}
 
-	vector<int> queens;
+	vector<uint64_t> queens;
 	vector<string> currentBoard(n, string(n, '.'));
 	vector<vector<string>> answers;
 	//with three uint64_ts I can find any solution where n < 32
@@ -22,23 +22,23 @@ vector<vector<string>> NQueens::solveNQueens(int n) {
 
 void NQueens::helper(vector<vector<string>> &answers,
 	vector<string> &board,
-	vector<int> &queens,
+	vector<uint64_t> &queens,
 	uint64_t &colMask,
 	uint64_t &deg45Mask,
 	uint64_t &deg135Mask,
-	int &n,
-	int row) {
+	uint64_t &n,
+	uint64_t row) {
 	if (row == n) {
 		answers.push_back(board);
 		return;
 	}
 
-	for (int col = 0; col < n; col++) {
+	for (uint64_t col = 0; col < n; col++) {
 		queens.push_back(col);
 
-		if (!(colMask & 1 << col)
-			&& !(deg45Mask & 1 << (row + col))
-			&& !(deg135Mask & 1 << (n - 1 + row - col))
+		if (!(colMask & (uint64_t)1 << col)
+			&& !(deg45Mask & (uint64_t)1 << (row + col))
+			&& !(deg135Mask & (uint64_t)1 << (n - 1 + row - col))
 			) {
 			colMask ^= 1LL << col;
 			deg45Mask ^= 1LL << (row + col);
