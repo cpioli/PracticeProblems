@@ -38,6 +38,12 @@
     <ClCompile Include="nQueens.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="nQueensThreaded.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nQueensThreaded.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\simpleCalcProblems.txt" />
