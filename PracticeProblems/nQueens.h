@@ -11,11 +11,11 @@ vector<int> I used a single variable and bit-shifting to solve the problem.
 using namespace std;
 class NQueens {
 public:
-	vector<vector<string>> solveNQueens(uint64_t n);
+	uint64_t solveNQueens(uint64_t n);
 private:
-	void helper(vector<vector<string>> &answers,
+	void helper(uint64_t &answers,
 		vector<string> &board,
-		vector<uint64_t> &queens,
+		//vector<uint64_t> &queens,
 		uint64_t &colMask,
 		uint64_t &deg45Mask,
 		uint64_t &deg135Mask,
